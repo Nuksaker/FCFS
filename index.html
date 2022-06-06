@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCFS Scheduling Algorithm</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.1.0/dist/css/bootstrap.min.css">
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div class="grid-container">
+
+        <!-- grid-start-stop -->
+        <div class="grid-items grid-4">
+            <button type="button" class="btn btn-success" id="start" onclick="Start()" style="width: 120px; font-size: 17px;">START</button><br><br>
+            <!-- <button type="button" class="btn btn-danger" style="width: 120px; font-size: 17px;">Terminate</button> -->
+        </div>
+
+        <!-- grid-status-IO -->
+        <div class="grid-items grid-5">
+            <div class="table-responsive-sm">
+                <table class="table table-hover" id="table-IO">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">I/O-NO</th>
+                            <th scope="col" class="text-center">I/O-Status</th>
+                            <th scope="col" class="text-center">I/O-Run</th>
+                            <th scope="col" class="text-center">I/O-Terminate</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <!-- grid-status-USB -->
+        <!-- <div class="grid-items grid-6">
+            <div class="table-responsive-sm">
+                <table class="table table-hover" id="table-USB" >
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">USB-NO</th>
+                            <th scope="col" class="text-center">Status</th>
+                            <th scope="col" class="text-center">USB-Run</th>
+                            <th scope="col" class="text-center">USB-Terminate</th>
+                        </tr>
+                    </thead>                  
+                </table>
+            </div>
+        </div> -->
+
+        <!-- grid-text-header -->
+        <div class="grid-items grid-1">
+            <h1 class="text-header">FCFS Scheduling Algorithm</h1>
+        </div>
+
+        <!-- grid-table -->
+        <div class="grid-items grid-2">
+            <div class="container mb-2">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered" id="table-main" style="text-align: center;">
+                        <thead>
+                            <tr style="height: 40px; ">
+                                <th scope="col" class="text-center" style="width:15px;">Process</th>
+                                <th scope="col" class="text-center" style="width:90px;">Status</th>
+                                <th scope="col" class="text-center" style="width:80px;">Burst Time</th>
+                                <th scope="col" class="text-center" style="width:100px;">Execue Time</th>
+                                <th scope="col" class="text-center" style="width:100px;">Waiting Time</th>
+                                <th scope="col" class="text-center" style="width:100px;">Arrival Time</th>
+                                <th scope="col" class="text-center" style="width:130px;">Turn Around Time</th>
+                                <th scope="col" class="text-center" style="width:90px;">I/O Time</th>
+                                <th scope="col" class="text-center" style="width:120px;">I/O Waitting</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- grid-button -->
+        <div class="grid-items grid-3">
+            <div class="col-sm-6">
+                <button type="button" href="#addProcess" id="btn_add" class="btn btn-primary" data-toggle="modal" style="width: 120px;">
+                    <span>Add Process</span>
+                </button>
+                <br><br>
+                <button type="submit" class="btn btn-success" onclick="addIO()" id="btn_io" value="Add I/O" style="width: 120px;">
+                    <span>Add I/O</span>
+                </button>
+                <br><br>
+                <button type="button" class="btn btn-info" id="btnDelete" onclick="Ref()" style="width: 130px;">Reset</button>
+                <br><br><br>
+            </div>
+        </div>
+
+        <!-- grid-time -->
+        <div class="grid-items grid-7">
+            <p class="pbox text-primary" style="font-size: 18px;">
+                <a>CPU Time = <a class="text-muted" id="cpu_time">0</a> <a>sec.</a></a><br>
+                <a>Average waiting time = </a><a class="text-muted" id="AvgW">0</a> sec.<br>
+                <a>Average turn around time = </a><a class="text-muted" id="AvgT">0</a> sec.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Add Process -->
+    <div id="addProcess" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Process</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Burst time(ms)</label>
+                            <input type="text" name="B_time" id="B_time" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" id="btn_add" data-dismiss="modal" onclick="Add_Process()"
+                            value="Add Process">
+                        <input type="button" id="cnc" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- add I/O -->
+    <!-- <div id="add_IO" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content text-center">
+                
+                <div class="modal-header ">
+                    <h4 class="modal-title">Add I/O</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="wrapper">
+                            <input type="radio" name="select" id="option-1" checked>
+                            <input type="radio" name="select" id="option-2">
+
+                            <label for="option-1" class="option option-1">
+                                <div class="dot"></div>
+                                <span>- CD -</span>
+                            </label>
+
+                            <label for="option-2" class="option option-2">
+                                <div class="dot"></div>
+                                <span>- USB -</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" data-dismiss="modal" onclick="addIO()" id="btn_io" value="Add I/O">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                </div>
+                
+            </div>
+        </div>
+    </div> -->
+</body>
+<!-- <script type="text/javascript" src="main.js"></script> -->
+<script type="text/javascript" src="Pcb.js"></script>
+<script type="text/javascript" src="Control.js"></script>
+
+</html>
